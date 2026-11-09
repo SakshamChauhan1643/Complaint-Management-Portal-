@@ -1438,7 +1438,6 @@ const ADMIN_PASSWORD = "Admin@123";
 let users = [];
 let complaints = [];
 let currentUser = null;
-let nextComplaintId = 1;
 
 /* LOGIN AND REGISTRATION SCREENS */
 
@@ -1473,9 +1472,7 @@ document.getElementById("registerForm").addEventListener("submit", function(even
     event.preventDefault();
 
     let name = document.getElementById("registerName").value.trim();
-
     let email = document.getElementById("registerEmail").value.trim().toLowerCase();
-
     let password = document.getElementById("registerPassword").value;
 
     if (email === ADMIN_EMAIL) {
@@ -1504,7 +1501,6 @@ document.getElementById("registerForm").addEventListener("submit", function(even
     "Account created successfully. You can now sign in.", "success");
 
     document.getElementById("registerForm").reset();
-
 });
 
 /* LOGIN SYSTEM */
@@ -1514,7 +1510,6 @@ document.getElementById("loginForm").addEventListener("submit", function(event) 
     event.preventDefault();
 
     let email = document.getElementById("loginEmail").value.trim().toLowerCase();
-
     let password = document.getElementById("loginPassword").value;
 
     if (email === ADMIN_EMAIL && password === ADMIN_PASSWORD) {
@@ -1541,12 +1536,11 @@ document.getElementById("loginForm").addEventListener("submit", function(event) 
         showMessage("loginMessage",
         "Invalid email or password. Please try again.", "error");
     }
-
 });
 
 /* OPEN DASHBOARDS */
 
-function openStudentApp() {
+async function openStudentApp() {
 
     document.getElementById("authPage").classList.add("hidden");
     document.getElementById("studentApp").classList.remove("hidden");
@@ -1563,10 +1557,17 @@ function openStudentApp() {
 
     showPage("student", "studentOverview");
 
-    updateStudentDashboard();
+    try {
+        complaints = await window.loadComplaints();
+        updateStudentDashboard();
+    }
+    catch (error) {
+        console.error("Could not load complaints:", error);
+        alert("Unable to load complaints. Please refresh the page.");
+    }
 }
 
-function openAdminApp() {
+async function openAdminApp() {
 
     document.getElementById("authPage").classList.add("hidden");
     document.getElementById("studentApp").classList.add("hidden");
@@ -1576,9 +1577,16 @@ function openAdminApp() {
 
     showPage("admin", "adminOverview");
 
-    displayAdminComplaints();
-    updateStatistics();
+    try {
+        complaints = await window.loadComplaints();
 
+        displayAdminComplaints();
+        updateStatistics();
+    }
+    catch (error) {
+        console.error("Could not load complaints:", error);
+        alert("Unable to load complaints. Please refresh the page.");
+    }
 }
 
 /* SECTION NAVIGATION */
@@ -1633,18 +1641,19 @@ function showPage(role, pageId, clickedButton) {
     if (pageId === "allComplaintsPage") {
         displayAdminComplaints();
     }
-
 }
 
-/* SUBMIT COMPLAINT */
+/* SUBMIT COMPLAINT TO FIRESTORE */
 
-document.getElementById("complaintForm").addEventListener("submit", function(event) {
+document.getElementById("complaintForm").addEventListener("submit", async function(event) {
 
     event.preventDefault();
 
-    let complaint = {
+    let button = this.querySelector("button[type='submit']");
+    button.disabled = true;
+    button.textContent = "Submitting...";
 
-        id: nextComplaintId,
+    let complaint = {
 
         title: document.getElementById("complaintTitle").value.trim(),
 
@@ -1660,21 +1669,37 @@ document.getElementById("complaintForm").addEventListener("submit", function(eve
 
         email: currentUser.email,
 
-        status: "Pending"
+        status: "Pending",
 
+        createdAt: new Date().toISOString()
     };
 
-    complaints.push(complaint);
+    try {
 
-    nextComplaintId++;
+        let savedComplaint = await window.saveComplaint(complaint);
 
-    document.getElementById("complaintForm").reset();
+        complaints.push(savedComplaint);
 
-    showMessage("complaintMessage",
-    "Complaint submitted successfully! Your complaint ID is #" + complaint.id + ".",
-    "success");
+        document.getElementById("complaintForm").reset();
 
-    updateStudentDashboard();
+        showMessage("complaintMessage",
+        "Complaint submitted successfully! Your complaint ID is #" + savedComplaint.id + ".",
+        "success");
+
+        updateStudentDashboard();
+
+    }
+    catch (error) {
+
+        console.error("Complaint submission failed:", error);
+
+        showMessage("complaintMessage",
+        "Could not submit complaint. Please try again.", "error");
+
+    }
+
+    button.disabled = false;
+    button.textContent = "Submit complaint →";
 
 });
 
@@ -1691,7 +1716,6 @@ function getStatusLabel(status) {
     }
 
     return '<span class="status resolved">Resolved</span>';
-
 }
 
 /* STUDENT COMPLAINTS */
@@ -1701,7 +1725,6 @@ function getMyComplaints() {
     return complaints.filter(function(item) {
         return item.email === currentUser.email;
     });
-
 }
 
 function makeComplaintCard(complaint) {
@@ -1714,7 +1737,7 @@ function makeComplaintCard(complaint) {
                 <div>
                     <h4>${escapeHTML(complaint.title)}</h4>
                     <div class="complaint-id">
-                        COMPLAINT #${complaint.id}
+                        COMPLAINT #${escapeHTML(complaint.id)}
                     </div>
                 </div>
 
@@ -1740,7 +1763,6 @@ function makeComplaintCard(complaint) {
 
         </div>
     `;
-
 }
 
 function displayStudentComplaints() {
@@ -1772,7 +1794,6 @@ function displayStudentComplaints() {
 
     document.getElementById("myComplaintCount").textContent =
         mine.length + " record(s)";
-
 }
 
 function updateStudentDashboard() {
@@ -1822,7 +1843,6 @@ function updateStudentDashboard() {
     document.getElementById("recentStudentComplaints").innerHTML = output;
 
     displayStudentComplaints();
-
 }
 
 /* ADMIN COMPLAINT TABLE */
@@ -1867,7 +1887,7 @@ function makeAdminTable(list) {
 
             <tr>
 
-                <td><strong>#${item.id}</strong></td>
+                <td><strong>#${escapeHTML(item.id)}</strong></td>
 
                 <td>
                     ${escapeHTML(item.student)}
@@ -1897,7 +1917,7 @@ function makeAdminTable(list) {
 
                 <td>
 
-                    <select onchange="updateStatus(${item.id}, this.value)">
+                    <select onchange="updateStatus('${escapeHTML(item.id)}', this.value)">
 
                         <option value="Pending"
                         ${item.status === "Pending" ? "selected" : ""}>
@@ -1931,7 +1951,6 @@ function makeAdminTable(list) {
     `;
 
     return output;
-
 }
 
 function displayAdminComplaints() {
@@ -1949,7 +1968,7 @@ function displayAdminComplaints() {
 
         item.status.toLowerCase().indexOf(search) !== -1 ||
 
-        String(item.id).indexOf(search) !== -1;
+        String(item.id).toLowerCase().indexOf(search) !== -1;
 
     });
 
@@ -1958,21 +1977,26 @@ function displayAdminComplaints() {
 
     document.getElementById("adminRecent").innerHTML =
         makeAdminTable(complaints.slice(-5));
-
 }
 
 document.getElementById("searchComplaint")
     .addEventListener("input", displayAdminComplaints);
 
-/* UPDATE COMPLAINT STATUS */
+/* UPDATE COMPLAINT STATUS IN FIRESTORE */
 
-function updateStatus(id, newStatus) {
+async function updateStatus(id, newStatus) {
 
     let complaint = complaints.find(function(item) {
         return item.id === id;
     });
 
-    if (complaint) {
+    if (!complaint) {
+        return;
+    }
+
+    try {
+
+        await window.changeComplaintStatus(id, newStatus);
 
         complaint.status = newStatus;
 
@@ -1981,7 +2005,14 @@ function updateStatus(id, newStatus) {
         updateStatistics();
 
     }
+    catch (error) {
 
+        console.error("Status update failed:", error);
+
+        alert("Could not update complaint status. Please try again.");
+
+        displayAdminComplaints();
+    }
 }
 
 /* ADMIN STATISTICS */
@@ -2005,7 +2036,6 @@ function updateStatistics() {
         complaints.filter(function(c) {
             return c.status === "Resolved";
         }).length;
-
 }
 
 /* ESCAPE USER INPUT */
@@ -2018,7 +2048,6 @@ function escapeHTML(value) {
         .split(">").join("&gt;")
         .split('"').join("&quot;")
         .split("'").join("&#039;");
-
 }
 
 /* LOGOUT */
@@ -2034,22 +2063,29 @@ function logout() {
     showAuth();
 
     showLogin();
-
 }
 
 </script>
 
+
 <script type="module">
-    import {
-  collection,
-  addDoc,
-  getDocs
-} from "https://www.gstatic.com/firebasejs/13.2.0/firebase-firestore.js";
 
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/13.2.0/firebase-app.js";
-  import { getFirestore } from "https://www.gstatic.com/firebasejs/13.2.0/firebase-firestore.js";
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/13.2.0/firebase-app.js";
 
-  const firebaseConfig = {
+import {
+    getFirestore,
+    collection,
+    addDoc,
+    getDocs,
+    doc,
+    updateDoc
+}
+from "https://www.gstatic.com/firebasejs/13.2.0/firebase-firestore.js";
+
+/* FIREBASE CONFIGURATION */
+
+const firebaseConfig = {
     apiKey: "AIzaSyCNUPdpZF_KgbAwp7ivWMsgVvGLanzaLHw",
     authDomain: "complaint-management-por-4d7a4.firebaseapp.com",
     projectId: "complaint-management-por-4d7a4",
@@ -2057,27 +2093,69 @@ function logout() {
     messagingSenderId: "43722555511",
     appId: "1:43722555511:web:a30ce2ada3c746e246c672",
     measurementId: "G-Q89PFY8220"
-  };
+};
 
-  const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
-  window.db = db;
-  try {
-  const testRef = await addDoc(collection(db, "test"), {
-    message: "Firebase Firestore is working!",
-    time: new Date()
-  });
+/* INITIALIZE FIREBASE */
 
-  console.log("Firestore test successful!");
-  console.log("Document ID:", testRef.id);
+const app = initializeApp(firebaseConfig);
 
-} catch (error) {
-  console.error("Firestore test failed:", error);
-}
+const db = getFirestore(app);
 
-  // Make Firestore available to the existing JavaScript
+window.db = db;
 
-  console.log("Firebase connected successfully!");
+/* SAVE COMPLAINT */
+
+window.saveComplaint = async function(complaint) {
+
+    const docRef = await addDoc(
+        collection(db, "complaints"),
+        complaint
+    );
+
+    return {
+        ...complaint,
+        id: docRef.id
+    };
+};
+
+/* LOAD COMPLAINTS */
+
+window.loadComplaints = async function() {
+
+    const snapshot = await getDocs(
+        collection(db, "complaints")
+    );
+
+    let complaintList = [];
+
+    snapshot.forEach(function(document) {
+
+        complaintList.push({
+            ...document.data(),
+            id: document.id
+        });
+
+    });
+
+    return complaintList;
+};
+
+/* UPDATE COMPLAINT STATUS */
+
+window.changeComplaintStatus = async function(id, newStatus) {
+
+    const complaintRef = doc(db, "complaints", id);
+
+    await updateDoc(complaintRef, {
+        status: newStatus
+    });
+
+    console.log("Complaint status updated:", id, newStatus);
+};
+
+console.log("Firebase connected successfully!");
+
 </script>
+
 </body>
 </html>
