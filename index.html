@@ -2038,7 +2038,14 @@ function logout() {
 }
 
 </script>
+
 <script type="module">
+    import {
+  collection,
+  addDoc,
+  getDocs
+} from "https://www.gstatic.com/firebasejs/13.2.0/firebase-firestore.js";
+
   import { initializeApp } from "https://www.gstatic.com/firebasejs/13.2.0/firebase-app.js";
   import { getFirestore } from "https://www.gstatic.com/firebasejs/13.2.0/firebase-firestore.js";
 
@@ -2054,9 +2061,21 @@ function logout() {
 
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
+  window.db = db;
+  try {
+  const testRef = await addDoc(collection(db, "test"), {
+    message: "Firebase Firestore is working!",
+    time: new Date()
+  });
+
+  console.log("Firestore test successful!");
+  console.log("Document ID:", testRef.id);
+
+} catch (error) {
+  console.error("Firestore test failed:", error);
+}
 
   // Make Firestore available to the existing JavaScript
-  window.db = db;
 
   console.log("Firebase connected successfully!");
 </script>
