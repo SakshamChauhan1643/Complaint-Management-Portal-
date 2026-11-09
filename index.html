@@ -2038,6 +2038,27 @@ function logout() {
 }
 
 </script>
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/13.2.0/firebase-app.js";
+  import { getFirestore } from "https://www.gstatic.com/firebasejs/13.2.0/firebase-firestore.js";
 
+  const firebaseConfig = {
+    apiKey: "AIzaSyCNUPdpZF_KgbAwp7ivWMsgVvGLanzaLHw",
+    authDomain: "complaint-management-por-4d7a4.firebaseapp.com",
+    projectId: "complaint-management-por-4d7a4",
+    storageBucket: "complaint-management-por-4d7a4.firebasestorage.app",
+    messagingSenderId: "43722555511",
+    appId: "1:43722555511:web:a30ce2ada3c746e246c672",
+    measurementId: "G-Q89PFY8220"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  // Make Firestore available to the existing JavaScript
+  window.db = db;
+
+  console.log("Firebase connected successfully!");
+</script>
 </body>
 </html>
