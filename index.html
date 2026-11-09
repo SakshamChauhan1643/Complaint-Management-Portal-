@@ -1,1323 +1,2043 @@
 
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CampusCare - Complaint Management Portal</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CampusCare | Complaint Management Portal</title>
 
-    <style>
+<style>
+/* BASIC STYLING */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
 
-        /* GENERAL STYLING */
+:root {
+    --navy: #14213d;
+    --blue: #3157d5;
+    --light: #edf2ff;
+    --text: #202a3b;
+    --muted: #718096;
+    --line: #e7ebf2;
+    --bg: #f5f7fb;
+}
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: Arial, sans-serif;
-        }
+body {
+    background: var(--bg);
+    color: var(--text);
+}
 
-        body {
-            background: #f3f5fa;
-            color: #222;
-        }
+button, input, select, textarea {
+    font: inherit;
+}
 
-        header {
-            background: #172554;
-            color: white;
-            padding: 20px 8%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+button {
+    cursor: pointer;
+    border: none;
+}
 
-        header h1 {
-            font-size: 26px;
-        }
+.hidden {
+    display: none !important;
+}
 
-        header span {
-            color: #93c5fd;
-        }
+/* LOGIN AND REGISTER */
 
-        .container {
-            width: 90%;
-            max-width: 1100px;
-            margin: 35px auto;
-        }
+.auth-page {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    background: white;
+}
 
-        /* CARDS */
+.auth-banner {
+    background: linear-gradient(145deg, #14213d, #203d78);
+    color: white;
+    padding: 9%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
 
-        .card {
-            background: white;
-            padding: 25px;
-            border-radius: 12px;
-            box-shadow: 0 3px 15px rgba(0, 0, 0, 0.07);
-            margin-bottom: 22px;
-        }
+.brand {
+    font-size: 27px;
+    font-weight: bold;
+}
 
-        h2 {
-            color: #172554;
-            margin-bottom: 18px;
-        }
+.brand span {
+    color: #8fb0ff;
+}
 
-        h3 {
-            color: #172554;
-            margin-bottom: 12px;
-        }
+.banner-content {
+    max-width: 510px;
+    margin: 55px 0;
+}
 
-        p {
-            line-height: 1.6;
-        }
+.banner-content h1 {
+    font-size: 45px;
+    line-height: 1.2;
+    margin-bottom: 20px;
+}
 
-        /* FORMS */
+.banner-content p {
+    color: #d4def4;
+    line-height: 1.8;
+}
 
-        label {
-            display: block;
-            font-weight: bold;
-            margin-top: 8px;
-        }
+.banner-points {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    font-size: 13px;
+}
 
-        input, select, textarea {
-            width: 100%;
-            padding: 12px;
-            margin: 8px 0 15px;
-            border: 1px solid #ccd2df;
-            border-radius: 6px;
-            font-size: 15px;
-        }
+.auth-side {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 45px 8%;
+}
 
-        input:focus, select:focus, textarea:focus {
-            outline: none;
-            border-color: #2563eb;
-        }
+.auth-card {
+    width: 100%;
+    max-width: 420px;
+}
 
-        textarea {
-            resize: vertical;
-            min-height: 110px;
-        }
+.auth-card h2 {
+    font-size: 29px;
+    color: var(--navy);
+    margin-bottom: 9px;
+}
 
-        /* BUTTONS */
+.auth-card > p {
+    color: var(--muted);
+    line-height: 1.6;
+    margin-bottom: 25px;
+}
 
-        button {
-            background: #2563eb;
-            color: white;
-            border: none;
-            padding: 11px 18px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 15px;
-            margin: 4px 3px 4px 0;
-        }
+.field {
+    margin-bottom: 18px;
+}
 
-        button:hover {
-            background: #1d4ed8;
-        }
+label {
+    display: block;
+    font-size: 13px;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
 
-        .secondary {
-            background: #64748b;
-        }
+input, select, textarea {
+    width: 100%;
+    padding: 13px 14px;
+    border: 1px solid #dce2ec;
+    border-radius: 9px;
+    background: white;
+    outline: none;
+}
 
-        .secondary:hover {
-            background: #475569;
-        }
+input:focus, select:focus, textarea:focus {
+    border-color: var(--blue);
+    box-shadow: 0 0 0 3px #3157d51a;
+}
 
-        .danger {
-            background: #dc2626;
-        }
+textarea {
+    resize: vertical;
+    min-height: 125px;
+}
 
-        .danger:hover {
-            background: #b91c1c;
-        }
+.primary-btn {
+    background: var(--blue);
+    color: white;
+    padding: 13px 19px;
+    border-radius: 9px;
+    font-weight: bold;
+}
 
-        /* GENERAL CLASSES */
+.primary-btn:hover {
+    background: #2446bd;
+}
 
-        .hidden {
-            display: none;
-        }
+.full-btn {
+    width: 100%;
+    margin-top: 5px;
+}
 
-        .link {
-            color: #2563eb;
-            cursor: pointer;
-            text-decoration: underline;
-        }
+.text-btn {
+    background: none;
+    color: var(--blue);
+    font-weight: bold;
+}
 
-        .message {
-            margin: 12px 0;
-            font-weight: bold;
-        }
+.auth-switch {
+    text-align: center;
+    margin-top: 22px;
+    color: var(--muted);
+    font-size: 14px;
+}
 
-        .success {
-            color: green;
-        }
+.message {
+    font-size: 13px;
+    font-weight: bold;
+    margin-top: 14px;
+}
 
-        .error {
-            color: red;
-        }
+.success {
+    color: green;
+}
 
-        /* DASHBOARD */
+.error {
+    color: red;
+}
 
-        .top-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
+/* DASHBOARD LAYOUT */
 
-        .stats {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 15px;
-            margin-bottom: 22px;
-        }
+.app {
+    min-height: 100vh;
+}
 
-        .stat-box {
-            background: #eff6ff;
-            padding: 20px;
-            border-radius: 9px;
-            text-align: center;
-        }
+.sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 250px;
+    background: var(--navy);
+    color: white;
+    padding: 27px 17px;
+    display: flex;
+    flex-direction: column;
+    z-index: 5;
+}
 
-        .stat-box h3 {
-            font-size: 27px;
-            margin-bottom: 5px;
-        }
+.sidebar .brand {
+    padding: 0 13px 35px;
+}
 
-        /* COMPLAINT DETAILS */
+.nav-label {
+    color: #8795b3;
+    text-transform: uppercase;
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    font-weight: bold;
+    padding: 12px 13px;
+}
 
-        .complaint-card {
-            border: 1px solid #e2e8f0;
-            padding: 18px;
-            border-radius: 9px;
-            margin-top: 15px;
-            background: #ffffff;
-        }
+.nav-link {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 13px;
+    border-radius: 9px;
+    color: #c6d0e3;
+    background: transparent;
+    text-align: left;
+    margin: 3px 0;
+    font-size: 14px;
+}
 
-        .complaint-card p {
-            margin: 7px 0;
-        }
+.nav-link:hover,
+.nav-link.active {
+    background: #ffffff16;
+    color: white;
+}
 
-        .complaint-id {
-            color: #64748b;
-            font-size: 13px;
-            margin-bottom: 8px;
-        }
+.nav-icon {
+    width: 22px;
+    text-align: center;
+    font-size: 17px;
+}
 
-        /* STATUS LABELS */
+.sidebar-bottom {
+    margin-top: auto;
+    border-top: 1px solid #ffffff20;
+    padding: 20px 10px 0;
+}
 
-        .status {
-            display: inline-block;
-            padding: 5px 10px;
-            border-radius: 15px;
-            font-size: 13px;
-            font-weight: bold;
-        }
+.profile-mini {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 17px;
+}
 
-        .pending {
-            color: #92400e;
-            background: #fef3c7;
-        }
+.avatar {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: #dce6ff;
+    color: #2446bd;
+    display: grid;
+    place-items: center;
+    font-weight: bold;
+}
 
-        .progress {
-            color: #1e40af;
-            background: #dbeafe;
-        }
+.profile-mini strong {
+    font-size: 13px;
+    display: block;
+}
 
-        .resolved {
-            color: #166534;
-            background: #dcfce7;
-        }
+.profile-mini small {
+    font-size: 11px;
+    color: #aab7ce;
+}
 
-        /* TABLE */
+.logout-btn {
+    width: 100%;
+    text-align: left;
+    padding: 11px;
+    border-radius: 8px;
+    background: #ffffff12;
+    color: white;
+}
 
-        .table-container {
-            overflow-x: auto;
-        }
+.main-area {
+    margin-left: 250px;
+    min-height: 100vh;
+}
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 15px;
-            min-width: 750px;
-        }
+.topbar {
+    height: 76px;
+    background: white;
+    border-bottom: 1px solid var(--line);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 38px;
+    position: sticky;
+    top: 0;
+    z-index: 3;
+}
 
-        th, td {
-            border-bottom: 1px solid #ddd;
-            padding: 12px;
-            text-align: left;
-        }
+.topbar h2 {
+    font-size: 19px;
+    color: var(--navy);
+}
 
-        th {
-            background: #eff6ff;
-            color: #172554;
-        }
+.topbar-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: var(--muted);
+    font-size: 13px;
+}
 
-        td select {
-            min-width: 135px;
-            margin: 0;
-        }
+.top-avatar {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    background: var(--light);
+    color: var(--blue);
+    display: grid;
+    place-items: center;
+    font-weight: bold;
+}
 
-        /* FOOTER */
+.content {
+    padding: 32px 38px;
+    max-width: 1450px;
+    margin: auto;
+}
 
-        footer {
-            text-align: center;
-            padding: 20px;
-            color: #64748b;
-            font-size: 14px;
-        }
+.page-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 15px;
+    margin-bottom: 25px;
+}
 
-        /* RESPONSIVE DESIGN */
+.page-heading h1 {
+    font-size: 25px;
+    color: var(--navy);
+    margin-bottom: 7px;
+}
 
-        @media (max-width: 700px) {
+.page-heading p {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.5;
+}
 
-            header {
-                padding: 18px 5%;
-                flex-direction: column;
-                gap: 8px;
-                text-align: center;
-            }
+.panel {
+    background: white;
+    border: 1px solid var(--line);
+    border-radius: 13px;
+    padding: 24px;
+    margin-bottom: 22px;
+    box-shadow: 0 3px 12px #17255408;
+}
 
-            .container {
-                width: 94%;
-            }
+.panel-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 18px;
+}
 
-            .stats {
-                grid-template-columns: repeat(2, 1fr);
-            }
+.panel-heading h3 {
+    font-size: 16px;
+    color: var(--navy);
+}
 
-            .card {
-                padding: 18px;
-            }
+/* STATISTICS */
 
-        }
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 22px;
+}
 
-    </style>
+.stat-card {
+    background: white;
+    border: 1px solid var(--line);
+    border-radius: 13px;
+    padding: 20px;
+}
 
+.stat-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 15px;
+}
+
+.stat-icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    background: var(--light);
+    display: grid;
+    place-items: center;
+    font-size: 18px;
+}
+
+.stat-card h3 {
+    font-size: 28px;
+    color: var(--navy);
+    margin-bottom: 5px;
+}
+
+.stat-card p {
+    font-size: 12px;
+    color: var(--muted);
+}
+
+.muted {
+    color: var(--muted);
+}
+
+.small {
+    font-size: 13px;
+}
+
+/* WELCOME SECTION */
+
+.welcome-panel {
+    background: linear-gradient(110deg, #1d3470, #3157d5);
+    color: white;
+    border: 0;
+    padding: 26px 28px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+}
+
+.welcome-panel h2 {
+    font-size: 21px;
+    margin-bottom: 8px;
+}
+
+.welcome-panel p {
+    font-size: 13px;
+    color: #dce5ff;
+    line-height: 1.5;
+}
+
+.welcome-symbol {
+    font-size: 46px;
+}
+
+.grid-two {
+    display: grid;
+    grid-template-columns: 1.2fr 0.8fr;
+    gap: 20px;
+}
+
+.quick-action {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    padding: 15px;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    margin-top: 11px;
+    background: white;
+    width: 100%;
+    text-align: left;
+}
+
+.quick-action:hover {
+    border-color: #b9c8fa;
+    background: #fafbff;
+}
+
+.quick-action strong {
+    font-size: 13px;
+    display: block;
+    margin-bottom: 4px;
+}
+
+.quick-action small {
+    font-size: 12px;
+    color: var(--muted);
+}
+
+/* FORMS */
+
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0 18px;
+}
+
+.form-grid .wide {
+    grid-column: 1 / -1;
+}
+
+.form-actions {
+    margin-top: 6px;
+}
+
+/* COMPLAINT CARDS */
+
+.complaint-list {
+    display: grid;
+    gap: 13px;
+}
+
+.complaint-item {
+    border: 1px solid var(--line);
+    border-radius: 11px;
+    padding: 18px;
+}
+
+.complaint-item-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.complaint-item h4 {
+    font-size: 15px;
+    color: var(--navy);
+    margin-bottom: 6px;
+}
+
+.complaint-id {
+    font-size: 11px;
+    color: var(--muted);
+}
+
+.complaint-meta {
+    display: flex;
+    gap: 18px;
+    flex-wrap: wrap;
+    font-size: 12px;
+    color: var(--muted);
+    margin: 10px 0;
+}
+
+.complaint-desc {
+    font-size: 13px;
+    line-height: 1.6;
+    color: #536174;
+}
+
+/* STATUS */
+
+.status {
+    display: inline-block;
+    border-radius: 20px;
+    padding: 6px 10px;
+    font-size: 11px;
+    font-weight: bold;
+    white-space: nowrap;
+}
+
+.pending {
+    background: #fff4d6;
+    color: #946200;
+}
+
+.progress {
+    background: #e7efff;
+    color: #2854bb;
+}
+
+.resolved {
+    background: #def7e8;
+    color: #187344;
+}
+
+.priority {
+    font-size: 11px;
+    font-weight: bold;
+}
+
+.priority.High {
+    color: #d14343;
+}
+
+.priority.Medium {
+    color: #b7791f;
+}
+
+.priority.Low {
+    color: #16804a;
+}
+
+/* ADMIN TABLE */
+
+.table-wrap {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 760px;
+}
+
+th {
+    text-align: left;
+    background: #f7f9fc;
+    color: #68758b;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 14px 12px;
+}
+
+td {
+    padding: 14px 12px;
+    border-bottom: 1px solid var(--line);
+    font-size: 12px;
+    color: #465368;
+}
+
+td strong {
+    color: var(--navy);
+}
+
+td select {
+    min-width: 125px;
+    padding: 8px;
+    font-size: 12px;
+    margin: 0;
+}
+
+.search-box {
+    max-width: 360px;
+    margin-bottom: 17px;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 38px 15px;
+    color: var(--muted);
+}
+
+.empty-icon {
+    font-size: 34px;
+    margin-bottom: 10px;
+}
+
+.empty-state strong {
+    display: block;
+    color: var(--navy);
+    margin-bottom: 6px;
+}
+
+.footer {
+    text-align: center;
+    color: #9aa4b5;
+    font-size: 11px;
+    padding: 18px;
+}
+
+/* RESPONSIVE DESIGN */
+
+@media (max-width: 1000px) {
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .content {
+        padding: 25px;
+    }
+
+    .topbar {
+        padding: 0 25px;
+    }
+
+    .grid-two {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 700px) {
+    .auth-page {
+        grid-template-columns: 1fr;
+    }
+
+    .auth-banner {
+        padding: 25px 7%;
+        min-height: 260px;
+    }
+
+    .banner-content {
+        margin: 35px 0;
+    }
+
+    .banner-content h1 {
+        font-size: 34px;
+    }
+
+    .banner-points {
+        display: none;
+    }
+
+    .auth-side {
+        padding: 35px 7%;
+    }
+
+    .sidebar {
+        width: 68px;
+        padding: 20px 8px;
+    }
+
+    .sidebar .brand {
+        font-size: 0;
+        padding: 0 0 30px;
+        text-align: center;
+    }
+
+    .sidebar .brand:first-letter {
+        font-size: 25px;
+    }
+
+    .nav-label,
+    .nav-link span:last-child,
+    .profile-mini div:last-child,
+    .logout-text {
+        display: none;
+    }
+
+    .nav-link {
+        justify-content: center;
+        padding: 13px 5px;
+    }
+
+    .nav-icon {
+        font-size: 19px;
+    }
+
+    .profile-mini {
+        justify-content: center;
+    }
+
+    .sidebar-bottom {
+        padding: 16px 0 0;
+    }
+
+    .logout-btn {
+        text-align: center;
+        font-size: 0;
+    }
+
+    .logout-btn:after {
+        content: "↪";
+        font-size: 19px;
+    }
+
+    .main-area {
+        margin-left: 68px;
+    }
+
+    .topbar {
+        height: 65px;
+        padding: 0 16px;
+    }
+
+    .topbar h2 {
+        font-size: 16px;
+    }
+
+    .top-user {
+        display: none;
+    }
+
+    .content {
+        padding: 20px 14px;
+    }
+
+    .page-heading h1 {
+        font-size: 21px;
+    }
+
+    .panel {
+        padding: 17px;
+    }
+
+    .stats-grid {
+        gap: 10px;
+    }
+
+    .stat-card {
+        padding: 15px;
+    }
+
+    .stat-card h3 {
+        font-size: 24px;
+    }
+
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .form-grid .wide {
+        grid-column: auto;
+    }
+
+    .welcome-panel {
+        padding: 20px;
+    }
+
+    .welcome-symbol {
+        display: none;
+    }
+}
+</style>
 </head>
 
 <body>
 
-    <!-- HEADER -->
+<!-- LOGIN AND REGISTRATION -->
 
-    <header>
+<div id="authPage" class="auth-page">
 
-        <h1>Campus<span>Care</span></h1>
+    <div class="auth-banner">
 
-        <p>Complaint Management Portal</p>
+        <div class="brand">Campus<span>Care.</span></div>
 
-    </header>
+        <div class="banner-content">
+            <h1>Your voice matters.<br>We make it heard.</h1>
 
+            <p>
+                A simple and organised platform to report campus issues,
+                track progress and help build a better place to learn.
+            </p>
+        </div>
 
-    <main class="container">
+        <div class="banner-points">
+            <span>Easy reporting</span>
+            <span>Track progress</span>
+            <span>Campus support</span>
+        </div>
 
+    </div>
 
-        <!-- LOGIN SECTION -->
+    <div class="auth-side">
 
-        <section id="loginSection" class="card">
+        <!-- LOGIN -->
 
-            <h2>Welcome to CampusCare</h2>
+        <div id="loginCard" class="auth-card">
 
-            <p>Login to access the complaint management portal.</p>
+            <h2>Welcome back</h2>
+
+            <p>Sign in to continue to your CampusCare account.</p>
 
             <form id="loginForm">
 
-                <label for="loginEmail">Email Address</label>
+                <div class="field">
+                    <label for="loginEmail">Email address</label>
+                    <input type="email" id="loginEmail"
+                    placeholder="name@college.com" required>
+                </div>
 
-                <input
-                    type="email"
-                    id="loginEmail"
-                    placeholder="Enter your email"
-                    required
-                >
+                <div class="field">
+                    <label for="loginPassword">Password</label>
+                    <input type="password" id="loginPassword"
+                    placeholder="Enter your password" required>
+                </div>
 
-                <label for="loginPassword">Password</label>
-
-                <input
-                    type="password"
-                    id="loginPassword"
-                    placeholder="Enter your password"
-                    required
-                >
-
-                <button type="submit">Login</button>
+                <button class="primary-btn full-btn" type="submit">
+                    Sign in to account →
+                </button>
 
             </form>
 
-            <p class="message" id="loginMessage"></p>
+            <p id="loginMessage" class="message"></p>
 
-            <p>
-                Don't have an account?
-                <span class="link" onclick="showRegister()">
-                    Register here
-                </span>
-            </p>
+            <div class="auth-switch">
+                New to CampusCare?
+                <button class="text-btn" type="button"
+                onclick="showRegister()">Create an account</button>
+            </div>
 
-        </section>
+        </div>
 
+        <!-- REGISTRATION -->
 
+        <div id="registerCard" class="auth-card hidden">
 
-        <!-- REGISTRATION SECTION -->
+            <h2>Create account</h2>
 
-        <section id="registerSection" class="card hidden">
-
-            <h2>Student Registration</h2>
-
-            <p>Create your account to submit complaints.</p>
+            <p>Register as a student to submit and track complaints.</p>
 
             <form id="registerForm">
 
-                <label for="registerName">Full Name</label>
+                <div class="field">
+                    <label for="registerName">Full name</label>
+                    <input type="text" id="registerName"
+                    placeholder="Enter your full name" required>
+                </div>
 
-                <input
-                    type="text"
-                    id="registerName"
-                    placeholder="Enter your full name"
-                    required
-                >
+                <div class="field">
+                    <label for="registerEmail">Email address</label>
+                    <input type="email" id="registerEmail"
+                    placeholder="name@college.com" required>
+                </div>
 
-                <label for="registerEmail">Email Address</label>
+                <div class="field">
+                    <label for="registerPassword">Create password</label>
+                    <input type="password" id="registerPassword"
+                    minlength="4" placeholder="At least 4 characters"
+                    required>
+                </div>
 
-                <input
-                    type="email"
-                    id="registerEmail"
-                    placeholder="Enter your email"
-                    required
-                >
-
-                <label for="registerPassword">Password</label>
-
-                <input
-                    type="password"
-                    id="registerPassword"
-                    minlength="4"
-                    placeholder="Create a password"
-                    required
-                >
-
-                <button type="submit">Create Account</button>
-
-                <button
-                    type="button"
-                    class="secondary"
-                    onclick="showLogin()"
-                >
-                    Back to Login
+                <button class="primary-btn full-btn" type="submit">
+                    Create my account →
                 </button>
 
             </form>
 
-            <p class="message" id="registerMessage"></p>
+            <p id="registerMessage" class="message"></p>
 
-        </section>
+            <div class="auth-switch">
+                Already registered?
+                <button class="text-btn" type="button"
+                onclick="showLogin()">Back to sign in</button>
+            </div>
 
+        </div>
 
+    </div>
 
-        <!-- STUDENT DASHBOARD -->
+</div>
 
-        <section id="studentDashboard" class="hidden">
+<!-- STUDENT DASHBOARD -->
 
+<div id="studentApp" class="app hidden">
 
-            <div class="card top-row">
+    <aside class="sidebar">
+
+        <div class="brand">Campus<span>Care.</span></div>
+
+        <div class="nav-label">Student workspace</div>
+
+        <button class="nav-link active"
+        onclick="showPage('student','studentOverview',this)">
+            <span class="nav-icon">⌂</span>
+            <span>Overview</span>
+        </button>
+
+        <button class="nav-link"
+        onclick="showPage('student','submitPage',this)">
+            <span class="nav-icon">＋</span>
+            <span>Submit a complaint</span>
+        </button>
+
+        <button class="nav-link"
+        onclick="showPage('student','myComplaintsPage',this)">
+            <span class="nav-icon">▤</span>
+            <span>My complaints</span>
+        </button>
+
+        <div class="sidebar-bottom">
+
+            <div class="profile-mini">
+                <div class="avatar" id="studentAvatar">S</div>
 
                 <div>
+                    <strong id="sideStudentName">Student</strong>
+                    <small>Student account</small>
+                </div>
+            </div>
 
-                    <h2>Student Dashboard</h2>
+            <button class="logout-btn" onclick="logout()">
+                ↪ <span class="logout-text">Log out</span>
+            </button>
 
-                    <p>
-                        Welcome,
-                        <strong id="studentName"></strong>
-                    </p>
+        </div>
+
+    </aside>
+
+    <div class="main-area">
+
+        <header class="topbar">
+
+            <h2 id="studentTopTitle">Overview</h2>
+
+            <div class="topbar-right">
+                <span class="top-user" id="studentTopName">Student</span>
+                <div class="top-avatar" id="studentTopAvatar">S</div>
+            </div>
+
+        </header>
+
+        <main class="content">
+
+            <!-- STUDENT OVERVIEW -->
+
+            <section id="studentOverview" class="student-page">
+
+                <div class="page-heading">
+                    <div>
+                        <h1>Student overview</h1>
+                        <p>Here is what's happening with your campus requests.</p>
+                    </div>
+                </div>
+
+                <div class="panel welcome-panel">
+
+                    <div>
+                        <h2>
+                            Welcome back,
+                            <span id="studentWelcomeName">Student</span>!
+                        </h2>
+
+                        <p>
+                            Have an issue on campus? Let us know.
+                            Submit a new complaint and follow its progress here.
+                        </p>
+                    </div>
+
+                    <div class="welcome-symbol">✦</div>
 
                 </div>
 
-                <button class="danger" onclick="logout()">
-                    Logout
-                </button>
+                <div class="stats-grid">
 
-            </div>
+                    <div class="stat-card">
+                        <div class="stat-top">
+                            <span class="muted small">Total submitted</span>
+                            <span class="stat-icon">▤</span>
+                        </div>
+                        <h3 id="studentTotal">0</h3>
+                        <p>All your complaints</p>
+                    </div>
 
+                    <div class="stat-card">
+                        <div class="stat-top">
+                            <span class="muted small">Pending</span>
+                            <span class="stat-icon">◷</span>
+                        </div>
+                        <h3 id="studentPending">0</h3>
+                        <p>Awaiting review</p>
+                    </div>
 
+                    <div class="stat-card">
+                        <div class="stat-top">
+                            <span class="muted small">In progress</span>
+                            <span class="stat-icon">↻</span>
+                        </div>
+                        <h3 id="studentProgress">0</h3>
+                        <p>Being worked on</p>
+                    </div>
 
-            <!-- SUBMIT COMPLAINT -->
-
-            <div class="card">
-
-                <h2>Submit a Complaint</h2>
-
-                <p>
-                    Fill in the details below to register your complaint.
-                </p>
-
-                <form id="complaintForm">
-
-                    <label for="complaintTitle">Complaint Title</label>
-
-                    <input
-                        type="text"
-                        id="complaintTitle"
-                        placeholder="Enter complaint title"
-                        required
-                    >
-
-
-                    <label for="complaintCategory">Category</label>
-
-                    <select id="complaintCategory" required>
-
-                        <option value="">Select Category</option>
-
-                        <option>Hostel</option>
-                        <option>Academics</option>
-                        <option>Electricity</option>
-                        <option>Internet</option>
-                        <option>Cleanliness</option>
-                        <option>Transport</option>
-                        <option>Other</option>
-
-                    </select>
-
-
-                    <label for="complaintLocation">Location</label>
-
-                    <input
-                        type="text"
-                        id="complaintLocation"
-                        placeholder="Enter location"
-                        required
-                    >
-
-
-                    <label for="complaintPriority">Priority</label>
-
-                    <select id="complaintPriority">
-
-                        <option>Low</option>
-                        <option selected>Medium</option>
-                        <option>High</option>
-
-                    </select>
-
-
-                    <label for="complaintDescription">Description</label>
-
-                    <textarea
-                        id="complaintDescription"
-                        placeholder="Describe your complaint..."
-                        required
-                    ></textarea>
-
-
-                    <button type="submit">
-                        Submit Complaint
-                    </button>
-
-                </form>
-
-                <p class="message" id="complaintMessage"></p>
-
-            </div>
-
-
-
-            <!-- STUDENT COMPLAINTS -->
-
-            <div class="card">
-
-                <h2>My Complaints</h2>
-
-                <p>Track the status of your submitted complaints.</p>
-
-                <div id="studentComplaints"></div>
-
-            </div>
-
-        </section>
-
-
-
-        <!-- ADMIN DASHBOARD -->
-
-        <section id="adminDashboard" class="hidden">
-
-
-            <div class="card top-row">
-
-                <div>
-
-                    <h2>Admin Dashboard</h2>
-
-                    <p>Manage and monitor student complaints.</p>
+                    <div class="stat-card">
+                        <div class="stat-top">
+                            <span class="muted small">Resolved</span>
+                            <span class="stat-icon">✓</span>
+                        </div>
+                        <h3 id="studentResolved">0</h3>
+                        <p>Successfully closed</p>
+                    </div>
 
                 </div>
 
-                <button class="danger" onclick="logout()">
-                    Logout
-                </button>
+                <div class="grid-two">
 
-            </div>
+                    <div class="panel">
 
+                        <div class="panel-heading">
+                            <h3>Recent complaints</h3>
 
-
-            <!-- STATISTICS -->
-
-            <div class="stats">
-
-                <div class="stat-box">
-
-                    <h3 id="totalCount">0</h3>
-
-                    <p>Total Complaints</p>
-
-                </div>
-
-
-                <div class="stat-box">
-
-                    <h3 id="pendingCount">0</h3>
-
-                    <p>Pending</p>
-
-                </div>
-
-
-                <div class="stat-box">
-
-                    <h3 id="progressCount">0</h3>
-
-                    <p>In Progress</p>
-
-                </div>
-
-
-                <div class="stat-box">
-
-                    <h3 id="resolvedCount">0</h3>
-
-                    <p>Resolved</p>
-
-                </div>
-
-            </div>
-
-
-
-            <!-- ADMIN COMPLAINT MANAGEMENT -->
-
-            <div class="card">
-
-                <h2>All Student Complaints</h2>
-
-                <label for="searchComplaint">Search Complaints</label>
-
-                <input
-                    type="text"
-                    id="searchComplaint"
-                    placeholder="Search by student, title, category or status"
-                >
-
-                <div id="adminComplaints"></div>
-
-            </div>
-
-        </section>
-
-    </main>
-
-
-
-    <!-- FOOTER -->
-
-    <footer>
-
-        <p>CampusCare | Complaint Management Portal</p>
-
-        <p>College Project</p>
-
-    </footer>
-
-
-
-    <script>
-
-        // ADMIN LOGIN DETAILS
-
-        const ADMIN_EMAIL = "admin@campus.com";
-        const ADMIN_PASSWORD = "Admin@123";
-
-
-        // DATA STORAGE USING ARRAYS
-
-        let users = [];
-
-        let complaints = [];
-
-        let currentUser = null;
-
-        let nextComplaintId = 1;
-
-
-
-        // SHOW LOGIN SECTION
-
-        function showLogin() {
-
-            document.getElementById("loginSection").classList.remove("hidden");
-
-            document.getElementById("registerSection").classList.add("hidden");
-
-            document.getElementById("loginMessage").textContent = "";
-
-        }
-
-
-
-        // SHOW REGISTRATION SECTION
-
-        function showRegister() {
-
-            document.getElementById("loginSection").classList.add("hidden");
-
-            document.getElementById("registerSection").classList.remove("hidden");
-
-            document.getElementById("registerMessage").textContent = "";
-
-        }
-
-
-
-        // HIDE ALL SECTIONS
-
-        function hideAllSections() {
-
-            document.getElementById("loginSection").classList.add("hidden");
-
-            document.getElementById("registerSection").classList.add("hidden");
-
-            document.getElementById("studentDashboard").classList.add("hidden");
-
-            document.getElementById("adminDashboard").classList.add("hidden");
-
-        }
-
-
-
-        // STUDENT REGISTRATION
-
-        document.getElementById("registerForm").addEventListener("submit", function(event) {
-
-            event.preventDefault();
-
-
-            let name = document.getElementById("registerName").value.trim();
-
-            let email = document.getElementById("registerEmail").value.trim().toLowerCase();
-
-            let password = document.getElementById("registerPassword").value;
-
-
-            // CHECK RESERVED ADMIN EMAIL
-
-            if (email === ADMIN_EMAIL) {
-
-                showMessage(
-                    "registerMessage",
-                    "This email is reserved for the administrator.",
-                    "error"
-                );
-
-                return;
-
-            }
-
-
-            // CHECK EXISTING USER
-
-            let existingUser = users.find(function(user) {
-
-                return user.email === email;
-
-            });
-
-
-            if (existingUser) {
-
-                showMessage(
-                    "registerMessage",
-                    "This email is already registered.",
-                    "error"
-                );
-
-                return;
-
-            }
-
-
-            // CREATE NEW USER
-
-            let newUser = {
-
-                name: name,
-
-                email: email,
-
-                password: password
-
-            };
-
-
-            users.push(newUser);
-
-
-            showMessage(
-                "registerMessage",
-                "Registration successful! Please login.",
-                "success"
-            );
-
-
-            document.getElementById("registerForm").reset();
-
-        });
-
-
-
-        // LOGIN SYSTEM
-
-        document.getElementById("loginForm").addEventListener("submit", function(event) {
-
-            event.preventDefault();
-
-
-            let email = document.getElementById("loginEmail").value.trim().toLowerCase();
-
-            let password = document.getElementById("loginPassword").value;
-
-
-            // ADMIN LOGIN
-
-            if (email === ADMIN_EMAIL && password === ADMIN_PASSWORD) {
-
-                currentUser = {
-
-                    name: "Administrator",
-
-                    email: email,
-
-                    role: "admin"
-
-                };
-
-
-                openAdminDashboard();
-
-                return;
-
-            }
-
-
-
-            // STUDENT LOGIN
-
-            let user = users.find(function(item) {
-
-                return item.email === email && item.password === password;
-
-            });
-
-
-            if (user) {
-
-                currentUser = user;
-
-                openStudentDashboard();
-
-            }
-
-            else {
-
-                showMessage(
-                    "loginMessage",
-                    "Invalid email or password.",
-                    "error"
-                );
-
-            }
-
-        });
-
-
-
-        // OPEN STUDENT DASHBOARD
-
-        function openStudentDashboard() {
-
-            hideAllSections();
-
-
-            document.getElementById("studentDashboard").classList.remove("hidden");
-
-
-            document.getElementById("studentName").textContent = currentUser.name;
-
-
-            displayStudentComplaints();
-
-        }
-
-
-
-        // OPEN ADMIN DASHBOARD
-
-        function openAdminDashboard() {
-
-            hideAllSections();
-
-
-            document.getElementById("adminDashboard").classList.remove("hidden");
-
-
-            document.getElementById("searchComplaint").value = "";
-
-
-            displayAdminComplaints();
-
-            updateStatistics();
-
-        }
-
-
-
-        // SUBMIT COMPLAINT
-
-        document.getElementById("complaintForm").addEventListener("submit", function(event) {
-
-            event.preventDefault();
-
-
-            let complaint = {
-
-                id: nextComplaintId,
-
-                title: document.getElementById("complaintTitle").value.trim(),
-
-                category: document.getElementById("complaintCategory").value,
-
-                location: document.getElementById("complaintLocation").value.trim(),
-
-                priority: document.getElementById("complaintPriority").value,
-
-                description: document.getElementById("complaintDescription").value.trim(),
-
-                student: currentUser.name,
-
-                email: currentUser.email,
-
-                status: "Pending"
-
-            };
-
-
-            // ADD COMPLAINT TO ARRAY
-
-            complaints.push(complaint);
-
-
-            nextComplaintId++;
-
-
-            document.getElementById("complaintForm").reset();
-
-
-            showMessage(
-                "complaintMessage",
-                "Complaint submitted successfully! Your Complaint ID is " + complaint.id,
-                "success"
-            );
-
-
-            displayStudentComplaints();
-
-        });
-
-
-
-        // DISPLAY STUDENT COMPLAINTS
-
-        function displayStudentComplaints() {
-
-            let output = "";
-
-
-            // FILTER CURRENT STUDENT COMPLAINTS
-
-            let myComplaints = complaints.filter(function(complaint) {
-
-                return complaint.email === currentUser.email;
-
-            });
-
-
-
-            if (myComplaints.length === 0) {
-
-                output = "<p>You have not submitted any complaints yet.</p>";
-
-            }
-
-            else {
-
-                myComplaints.forEach(function(complaint) {
-
-                    output += `
-
-                        <div class="complaint-card">
-
-                            <p class="complaint-id">
-                                Complaint ID: #${complaint.id}
-                            </p>
-
-                            <h3>${escapeHTML(complaint.title)}</h3>
-
-                            <p>
-                                <b>Category:</b>
-                                ${escapeHTML(complaint.category)}
-                            </p>
-
-                            <p>
-                                <b>Location:</b>
-                                ${escapeHTML(complaint.location)}
-                            </p>
-
-                            <p>
-                                <b>Priority:</b>
-                                ${escapeHTML(complaint.priority)}
-                            </p>
-
-                            <p>
-                                <b>Description:</b>
-                                ${escapeHTML(complaint.description)}
-                            </p>
-
-                            <p>
-                                <b>Status:</b>
-                                ${getStatusLabel(complaint.status)}
-                            </p>
-
+                            <button class="text-btn"
+                            onclick="showPage('student','myComplaintsPage')">
+                                View all →
+                            </button>
                         </div>
 
-                    `;
-
-                });
-
-            }
-
-
-            document.getElementById("studentComplaints").innerHTML = output;
-
-        }
-
-
-
-        // DISPLAY ALL COMPLAINTS FOR ADMIN
-
-        function displayAdminComplaints() {
-
-            let output = "";
-
-
-            // GET SEARCH VALUE
-
-            let search = document.getElementById("searchComplaint").value.trim().toLowerCase();
-
-
-            // FILTER COMPLAINTS
-
-            let filteredComplaints = complaints.filter(function(complaint) {
-
-                return (
-
-                    complaint.student.toLowerCase().indexOf(search) !== -1 ||
-
-                    complaint.title.toLowerCase().indexOf(search) !== -1 ||
-
-                    complaint.category.toLowerCase().indexOf(search) !== -1 ||
-
-                    complaint.status.toLowerCase().indexOf(search) !== -1 ||
-
-                    String(complaint.id).indexOf(search) !== -1
-
-                );
-
-            });
-
-
-
-            if (filteredComplaints.length === 0) {
-
-                if (complaints.length === 0) {
-
-                    output = "<p>No complaints have been submitted yet.</p>";
-
-                }
-
-                else {
-
-                    output = "<p>No matching complaints found.</p>";
-
-                }
-
-            }
-
-            else {
-
-                output = `
-
-                    <div class="table-container">
-
-                    <table>
-
-                        <tr>
-
-                            <th>ID</th>
-
-                            <th>Student</th>
-
-                            <th>Complaint</th>
-
-                            <th>Category</th>
-
-                            <th>Priority</th>
-
-                            <th>Status</th>
-
-                            <th>Update</th>
-
-                        </tr>
-
-                `;
-
-
-                filteredComplaints.forEach(function(complaint) {
-
-                    output += `
-
-                        <tr>
-
-                            <td>#${complaint.id}</td>
-
-                            <td>${escapeHTML(complaint.student)}</td>
-
-                            <td>${escapeHTML(complaint.title)}</td>
-
-                            <td>${escapeHTML(complaint.category)}</td>
-
-                            <td>${escapeHTML(complaint.priority)}</td>
-
-                            <td>${getStatusLabel(complaint.status)}</td>
-
-                            <td>
-
-                                <select onchange="updateStatus(${complaint.id}, this.value)">
-
-                                    <option value="Pending" ${complaint.status === "Pending" ? "selected" : ""}>
-                                        Pending
-                                    </option>
-
-                                    <option value="In Progress" ${complaint.status === "In Progress" ? "selected" : ""}>
-                                        In Progress
-                                    </option>
-
-                                    <option value="Resolved" ${complaint.status === "Resolved" ? "selected" : ""}>
-                                        Resolved
-                                    </option>
-
-                                </select>
-
-                            </td>
-
-                        </tr>
-
-                    `;
-
-                });
-
-
-                output += `
-
-                    </table>
+                        <div id="recentStudentComplaints"></div>
 
                     </div>
 
-                `;
+                    <div class="panel">
 
+                        <div class="panel-heading">
+                            <h3>Quick actions</h3>
+                        </div>
+
+                        <button class="quick-action"
+                        onclick="showPage('student','submitPage')">
+
+                            <span class="stat-icon">＋</span>
+
+                            <span>
+                                <strong>Submit a complaint</strong>
+                                <small>Report a new campus issue</small>
+                            </span>
+
+                        </button>
+
+                        <button class="quick-action"
+                        onclick="showPage('student','myComplaintsPage')">
+
+                            <span class="stat-icon">▤</span>
+
+                            <span>
+                                <strong>Track your complaints</strong>
+                                <small>Check the latest status updates</small>
+                            </span>
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            <!-- SUBMIT COMPLAINT -->
+
+            <section id="submitPage" class="student-page hidden">
+
+                <div class="page-heading">
+                    <div>
+                        <h1>Submit a complaint</h1>
+                        <p>
+                            Share the details of the issue so the concerned
+                            team can review it.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="panel">
+
+                    <div class="panel-heading">
+                        <h3>Complaint details</h3>
+                        <span class="small muted">All fields are required</span>
+                    </div>
+
+                    <form id="complaintForm">
+
+                        <div class="form-grid">
+
+                            <div class="field">
+                                <label for="complaintTitle">Complaint title</label>
+                                <input type="text" id="complaintTitle"
+                                placeholder="e.g. Wi-Fi not working" required>
+                            </div>
+
+                            <div class="field">
+                                <label for="complaintCategory">Category</label>
+
+                                <select id="complaintCategory" required>
+                                    <option value="">Select category</option>
+                                    <option>Hostel</option>
+                                    <option>Academics</option>
+                                    <option>Electricity</option>
+                                    <option>Internet</option>
+                                    <option>Cleanliness</option>
+                                    <option>Transport</option>
+                                    <option>Other</option>
+                                </select>
+                            </div>
+
+                            <div class="field">
+                                <label for="complaintLocation">Location</label>
+                                <input type="text" id="complaintLocation"
+                                placeholder="Building, block or room number"
+                                required>
+                            </div>
+
+                            <div class="field">
+                                <label for="complaintPriority">Priority</label>
+
+                                <select id="complaintPriority">
+                                    <option>Low</option>
+                                    <option selected>Medium</option>
+                                    <option>High</option>
+                                </select>
+                            </div>
+
+                            <div class="field wide">
+                                <label for="complaintDescription">Description</label>
+
+                                <textarea id="complaintDescription"
+                                placeholder="Explain the issue clearly..."
+                                required></textarea>
+                            </div>
+
+                        </div>
+
+                        <div class="form-actions">
+                            <button class="primary-btn" type="submit">
+                                Submit complaint →
+                            </button>
+                        </div>
+
+                    </form>
+
+                    <p id="complaintMessage" class="message"></p>
+
+                </div>
+
+            </section>
+
+            <!-- MY COMPLAINTS -->
+
+            <section id="myComplaintsPage" class="student-page hidden">
+
+                <div class="page-heading">
+
+                    <div>
+                        <h1>My complaints</h1>
+                        <p>
+                            Review your submitted complaints and track
+                            their current status.
+                        </p>
+                    </div>
+
+                    <button class="primary-btn"
+                    onclick="showPage('student','submitPage')">
+                        ＋ New complaint
+                    </button>
+
+                </div>
+
+                <div class="panel">
+
+                    <div class="panel-heading">
+                        <h3>Complaint history</h3>
+                        <span class="small muted" id="myComplaintCount">
+                            0 records
+                        </span>
+                    </div>
+
+                    <div id="studentComplaints" class="complaint-list"></div>
+
+                </div>
+
+            </section>
+
+            <div class="footer">
+                CampusCare · Complaint Management Portal · College Project
+            </div>
+
+        </main>
+
+    </div>
+
+</div>
+
+<!-- ADMIN DASHBOARD -->
+
+<div id="adminApp" class="app hidden">
+
+    <aside class="sidebar">
+
+        <div class="brand">Campus<span>Care.</span></div>
+
+        <div class="nav-label">Administration</div>
+
+        <button class="nav-link active"
+        onclick="showPage('admin','adminOverview',this)">
+            <span class="nav-icon">⌂</span>
+            <span>Overview</span>
+        </button>
+
+        <button class="nav-link"
+        onclick="showPage('admin','allComplaintsPage',this)">
+            <span class="nav-icon">▤</span>
+            <span>All complaints</span>
+        </button>
+
+        <div class="sidebar-bottom">
+
+            <div class="profile-mini">
+                <div class="avatar">A</div>
+
+                <div>
+                    <strong>Administrator</strong>
+                    <small>Admin account</small>
+                </div>
+            </div>
+
+            <button class="logout-btn" onclick="logout()">
+                ↪ <span class="logout-text">Log out</span>
+            </button>
+
+        </div>
+
+    </aside>
+
+    <div class="main-area">
+
+        <header class="topbar">
+
+            <h2 id="adminTopTitle">Admin overview</h2>
+
+            <div class="topbar-right">
+                <span class="top-user">Administrator</span>
+                <div class="top-avatar">A</div>
+            </div>
+
+        </header>
+
+        <main class="content">
+
+            <!-- ADMIN OVERVIEW -->
+
+            <section id="adminOverview" class="admin-page">
+
+                <div class="page-heading">
+                    <div>
+                        <h1>Admin overview</h1>
+                        <p>
+                            Monitor campus complaints and manage their resolution.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="stats-grid">
+
+                    <div class="stat-card">
+                        <div class="stat-top">
+                            <span class="muted small">Total complaints</span>
+                            <span class="stat-icon">▤</span>
+                        </div>
+                        <h3 id="totalCount">0</h3>
+                        <p>All submissions</p>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-top">
+                            <span class="muted small">Pending</span>
+                            <span class="stat-icon">◷</span>
+                        </div>
+                        <h3 id="pendingCount">0</h3>
+                        <p>Awaiting action</p>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-top">
+                            <span class="muted small">In progress</span>
+                            <span class="stat-icon">↻</span>
+                        </div>
+                        <h3 id="progressCount">0</h3>
+                        <p>Currently being handled</p>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-top">
+                            <span class="muted small">Resolved</span>
+                            <span class="stat-icon">✓</span>
+                        </div>
+                        <h3 id="resolvedCount">0</h3>
+                        <p>Completed complaints</p>
+                    </div>
+
+                </div>
+
+                <div class="panel">
+
+                    <div class="panel-heading">
+                        <h3>Latest complaints</h3>
+
+                        <button class="text-btn"
+                        onclick="showPage('admin','allComplaintsPage')">
+                            Manage all →
+                        </button>
+                    </div>
+
+                    <div id="adminRecent"></div>
+
+                </div>
+
+            </section>
+
+            <!-- ALL COMPLAINTS -->
+
+            <section id="allComplaintsPage" class="admin-page hidden">
+
+                <div class="page-heading">
+                    <div>
+                        <h1>All complaints</h1>
+                        <p>
+                            Search submissions and update their progress.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="panel">
+
+                    <div class="panel-heading">
+                        <h3>Complaint management</h3>
+                        <span class="small muted">Administrator access</span>
+                    </div>
+
+                    <div class="search-box">
+                        <input type="text" id="searchComplaint"
+                        placeholder="Search by student, title, category, status or ID...">
+                    </div>
+
+                    <div id="adminComplaints"></div>
+
+                </div>
+
+            </section>
+
+            <div class="footer">
+                CampusCare · Administration Panel · College Project
+            </div>
+
+        </main>
+
+    </div>
+
+</div>
+
+<script>
+
+/* ACCOUNT AND COMPLAINT DATA */
+
+const ADMIN_EMAIL = "admin@campus.com";
+const ADMIN_PASSWORD = "Admin@123";
+
+let users = [];
+let complaints = [];
+let currentUser = null;
+let nextComplaintId = 1;
+
+/* LOGIN AND REGISTRATION SCREENS */
+
+function showLogin() {
+    document.getElementById("loginCard").classList.remove("hidden");
+    document.getElementById("registerCard").classList.add("hidden");
+    document.getElementById("loginMessage").textContent = "";
+}
+
+function showRegister() {
+    document.getElementById("loginCard").classList.add("hidden");
+    document.getElementById("registerCard").classList.remove("hidden");
+    document.getElementById("registerMessage").textContent = "";
+}
+
+function showAuth() {
+    document.getElementById("authPage").classList.remove("hidden");
+    document.getElementById("studentApp").classList.add("hidden");
+    document.getElementById("adminApp").classList.add("hidden");
+}
+
+function showMessage(id, message, type) {
+    const element = document.getElementById(id);
+    element.textContent = message;
+    element.className = "message " + type;
+}
+
+/* STUDENT REGISTRATION */
+
+document.getElementById("registerForm").addEventListener("submit", function(event) {
+
+    event.preventDefault();
+
+    let name = document.getElementById("registerName").value.trim();
+
+    let email = document.getElementById("registerEmail").value.trim().toLowerCase();
+
+    let password = document.getElementById("registerPassword").value;
+
+    if (email === ADMIN_EMAIL) {
+        showMessage("registerMessage",
+        "This email is reserved for the administrator.", "error");
+        return;
+    }
+
+    let existingUser = users.find(function(user) {
+        return user.email === email;
+    });
+
+    if (existingUser) {
+        showMessage("registerMessage",
+        "This email is already registered.", "error");
+        return;
+    }
+
+    users.push({
+        name: name,
+        email: email,
+        password: password
+    });
+
+    showMessage("registerMessage",
+    "Account created successfully. You can now sign in.", "success");
+
+    document.getElementById("registerForm").reset();
+
+});
+
+/* LOGIN SYSTEM */
+
+document.getElementById("loginForm").addEventListener("submit", function(event) {
+
+    event.preventDefault();
+
+    let email = document.getElementById("loginEmail").value.trim().toLowerCase();
+
+    let password = document.getElementById("loginPassword").value;
+
+    if (email === ADMIN_EMAIL && password === ADMIN_PASSWORD) {
+
+        currentUser = {
+            name: "Administrator",
+            email: email,
+            role: "admin"
+        };
+
+        openAdminApp();
+        return;
+    }
+
+    let user = users.find(function(item) {
+        return item.email === email && item.password === password;
+    });
+
+    if (user) {
+        currentUser = user;
+        openStudentApp();
+    }
+    else {
+        showMessage("loginMessage",
+        "Invalid email or password. Please try again.", "error");
+    }
+
+});
+
+/* OPEN DASHBOARDS */
+
+function openStudentApp() {
+
+    document.getElementById("authPage").classList.add("hidden");
+    document.getElementById("studentApp").classList.remove("hidden");
+    document.getElementById("adminApp").classList.add("hidden");
+
+    document.getElementById("studentWelcomeName").textContent = currentUser.name;
+    document.getElementById("sideStudentName").textContent = currentUser.name;
+    document.getElementById("studentTopName").textContent = currentUser.name;
+
+    let initial = currentUser.name.charAt(0).toUpperCase();
+
+    document.getElementById("studentAvatar").textContent = initial;
+    document.getElementById("studentTopAvatar").textContent = initial;
+
+    showPage("student", "studentOverview");
+
+    updateStudentDashboard();
+}
+
+function openAdminApp() {
+
+    document.getElementById("authPage").classList.add("hidden");
+    document.getElementById("studentApp").classList.add("hidden");
+    document.getElementById("adminApp").classList.remove("hidden");
+
+    document.getElementById("searchComplaint").value = "";
+
+    showPage("admin", "adminOverview");
+
+    displayAdminComplaints();
+    updateStatistics();
+
+}
+
+/* SECTION NAVIGATION */
+
+function showPage(role, pageId, clickedButton) {
+
+    let pages = document.querySelectorAll(
+        role === "student" ? ".student-page" : ".admin-page"
+    );
+
+    pages.forEach(function(page) {
+        page.classList.add("hidden");
+    });
+
+    document.getElementById(pageId).classList.remove("hidden");
+
+    let app = document.getElementById(
+        role === "student" ? "studentApp" : "adminApp"
+    );
+
+    app.querySelectorAll(".nav-link").forEach(function(link) {
+        link.classList.remove("active");
+    });
+
+    if (clickedButton) {
+        clickedButton.classList.add("active");
+    }
+    else {
+        app.querySelectorAll(".nav-link").forEach(function(link) {
+            if (link.getAttribute("onclick").includes(pageId)) {
+                link.classList.add("active");
             }
+        });
+    }
 
+    let titles = {
+        studentOverview: "Overview",
+        submitPage: "Submit a complaint",
+        myComplaintsPage: "My complaints",
+        adminOverview: "Admin overview",
+        allComplaintsPage: "All complaints"
+    };
 
-            document.getElementById("adminComplaints").innerHTML = output;
+    document.getElementById(
+        role === "student" ? "studentTopTitle" : "adminTopTitle"
+    ).textContent = titles[pageId];
 
-        }
+    if (pageId === "myComplaintsPage") {
+        displayStudentComplaints();
+    }
 
+    if (pageId === "allComplaintsPage") {
+        displayAdminComplaints();
+    }
 
+}
 
-        // SEARCH COMPLAINTS
+/* SUBMIT COMPLAINT */
 
-        document.getElementById("searchComplaint").addEventListener("input", function() {
+document.getElementById("complaintForm").addEventListener("submit", function(event) {
 
-            displayAdminComplaints();
+    event.preventDefault();
 
+    let complaint = {
+
+        id: nextComplaintId,
+
+        title: document.getElementById("complaintTitle").value.trim(),
+
+        category: document.getElementById("complaintCategory").value,
+
+        location: document.getElementById("complaintLocation").value.trim(),
+
+        priority: document.getElementById("complaintPriority").value,
+
+        description: document.getElementById("complaintDescription").value.trim(),
+
+        student: currentUser.name,
+
+        email: currentUser.email,
+
+        status: "Pending"
+
+    };
+
+    complaints.push(complaint);
+
+    nextComplaintId++;
+
+    document.getElementById("complaintForm").reset();
+
+    showMessage("complaintMessage",
+    "Complaint submitted successfully! Your complaint ID is #" + complaint.id + ".",
+    "success");
+
+    updateStudentDashboard();
+
+});
+
+/* STATUS LABEL */
+
+function getStatusLabel(status) {
+
+    if (status === "Pending") {
+        return '<span class="status pending">Pending</span>';
+    }
+
+    if (status === "In Progress") {
+        return '<span class="status progress">In progress</span>';
+    }
+
+    return '<span class="status resolved">Resolved</span>';
+
+}
+
+/* STUDENT COMPLAINTS */
+
+function getMyComplaints() {
+
+    return complaints.filter(function(item) {
+        return item.email === currentUser.email;
+    });
+
+}
+
+function makeComplaintCard(complaint) {
+
+    return `
+        <div class="complaint-item">
+
+            <div class="complaint-item-top">
+
+                <div>
+                    <h4>${escapeHTML(complaint.title)}</h4>
+                    <div class="complaint-id">
+                        COMPLAINT #${complaint.id}
+                    </div>
+                </div>
+
+                ${getStatusLabel(complaint.status)}
+
+            </div>
+
+            <div class="complaint-meta">
+
+                <span>▦ ${escapeHTML(complaint.category)}</span>
+
+                <span>⌖ ${escapeHTML(complaint.location)}</span>
+
+                <span class="priority ${complaint.priority}">
+                    ● ${escapeHTML(complaint.priority)} priority
+                </span>
+
+            </div>
+
+            <p class="complaint-desc">
+                ${escapeHTML(complaint.description)}
+            </p>
+
+        </div>
+    `;
+
+}
+
+function displayStudentComplaints() {
+
+    let mine = getMyComplaints();
+
+    let output = "";
+
+    if (mine.length === 0) {
+
+        output = `
+            <div class="empty-state">
+                <div class="empty-icon">▤</div>
+                <strong>No complaints yet</strong>
+                <p>Your submitted complaints will appear here.</p>
+            </div>
+        `;
+
+    }
+    else {
+
+        mine.slice().reverse().forEach(function(item) {
+            output += makeComplaintCard(item);
         });
 
+    }
 
+    document.getElementById("studentComplaints").innerHTML = output;
 
-        // GET STATUS LABEL
+    document.getElementById("myComplaintCount").textContent =
+        mine.length + " record(s)";
 
-        function getStatusLabel(status) {
+}
 
-            if (status === "Pending") {
+function updateStudentDashboard() {
 
-                return '<span class="status pending">Pending</span>';
+    let mine = getMyComplaints();
 
-            }
+    document.getElementById("studentTotal").textContent = mine.length;
 
-            else if (status === "In Progress") {
+    document.getElementById("studentPending").textContent =
+        mine.filter(function(c) {
+            return c.status === "Pending";
+        }).length;
 
-                return '<span class="status progress">In Progress</span>';
+    document.getElementById("studentProgress").textContent =
+        mine.filter(function(c) {
+            return c.status === "In Progress";
+        }).length;
 
-            }
+    document.getElementById("studentResolved").textContent =
+        mine.filter(function(c) {
+            return c.status === "Resolved";
+        }).length;
 
-            else {
+    let recent = mine.slice().reverse().slice(0, 3);
 
-                return '<span class="status resolved">Resolved</span>';
+    let output = "";
 
-            }
+    if (recent.length === 0) {
 
-        }
+        output = `
+            <div class="empty-state">
+                <div class="empty-icon">✦</div>
+                <strong>Nothing to show yet</strong>
+                <p>Submit your first complaint to see it here.</p>
+            </div>
+        `;
 
+    }
+    else {
 
+        recent.forEach(function(item) {
+            output += makeComplaintCard(item);
+        });
 
-        // UPDATE COMPLAINT STATUS
+    }
 
-        function updateStatus(id, newStatus) {
+    document.getElementById("recentStudentComplaints").innerHTML = output;
 
-            let complaint = complaints.find(function(item) {
+    displayStudentComplaints();
 
-                return item.id === id;
+}
 
-            });
+/* ADMIN COMPLAINT TABLE */
 
+function makeAdminTable(list) {
 
-            if (complaint) {
+    if (list.length === 0) {
 
-                complaint.status = newStatus;
+        return `
+            <div class="empty-state">
+                <div class="empty-icon">▤</div>
+                <strong>No complaints found</strong>
+                <p>New student submissions will appear here.</p>
+            </div>
+        `;
 
+    }
 
-                displayAdminComplaints();
+    let output = `
+        <div class="table-wrap">
 
-                updateStatistics();
+            <table>
 
-            }
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Student</th>
+                        <th>Complaint</th>
+                        <th>Category</th>
+                        <th>Priority</th>
+                        <th>Status</th>
+                        <th>Update status</th>
+                    </tr>
+                </thead>
 
-        }
+                <tbody>
+    `;
 
+    list.slice().reverse().forEach(function(item) {
 
+        output += `
 
-        // UPDATE ADMIN STATISTICS
+            <tr>
 
-        function updateStatistics() {
+                <td><strong>#${item.id}</strong></td>
 
-            let total = complaints.length;
+                <td>
+                    ${escapeHTML(item.student)}
+                    <br>
+                    <span class="muted">
+                        ${escapeHTML(item.email)}
+                    </span>
+                </td>
 
+                <td>
+                    <strong>${escapeHTML(item.title)}</strong>
+                    <br>
+                    <span class="muted">
+                        ${escapeHTML(item.location)}
+                    </span>
+                </td>
 
-            let pending = complaints.filter(function(item) {
+                <td>${escapeHTML(item.category)}</td>
 
-                return item.status === "Pending";
+                <td>
+                    <span class="priority ${item.priority}">
+                        ${escapeHTML(item.priority)}
+                    </span>
+                </td>
 
-            }).length;
+                <td>${getStatusLabel(item.status)}</td>
 
+                <td>
 
-            let progress = complaints.filter(function(item) {
+                    <select onchange="updateStatus(${item.id}, this.value)">
 
-                return item.status === "In Progress";
+                        <option value="Pending"
+                        ${item.status === "Pending" ? "selected" : ""}>
+                            Pending
+                        </option>
 
-            }).length;
+                        <option value="In Progress"
+                        ${item.status === "In Progress" ? "selected" : ""}>
+                            In progress
+                        </option>
 
+                        <option value="Resolved"
+                        ${item.status === "Resolved" ? "selected" : ""}>
+                            Resolved
+                        </option>
 
-            let resolved = complaints.filter(function(item) {
+                    </select>
 
-                return item.status === "Resolved";
+                </td>
 
-            }).length;
+            </tr>
 
+        `;
 
+    });
 
-            document.getElementById("totalCount").textContent = total;
+    output += `
+                </tbody>
+            </table>
+        </div>
+    `;
 
-            document.getElementById("pendingCount").textContent = pending;
+    return output;
 
-            document.getElementById("progressCount").textContent = progress;
+}
 
-            document.getElementById("resolvedCount").textContent = resolved;
+function displayAdminComplaints() {
 
-        }
+    let search = document.getElementById("searchComplaint")
+        .value.trim().toLowerCase();
 
+    let filtered = complaints.filter(function(item) {
 
+        return item.student.toLowerCase().indexOf(search) !== -1 ||
 
-        // DISPLAY MESSAGES
+        item.title.toLowerCase().indexOf(search) !== -1 ||
 
-        function showMessage(elementId, message, type) {
+        item.category.toLowerCase().indexOf(search) !== -1 ||
 
-            let element = document.getElementById(elementId);
+        item.status.toLowerCase().indexOf(search) !== -1 ||
 
+        String(item.id).indexOf(search) !== -1;
 
-            element.textContent = message;
+    });
 
-            element.className = "message " + type;
+    document.getElementById("adminComplaints").innerHTML =
+        makeAdminTable(filtered);
 
-        }
+    document.getElementById("adminRecent").innerHTML =
+        makeAdminTable(complaints.slice(-5));
 
+}
 
+document.getElementById("searchComplaint")
+    .addEventListener("input", displayAdminComplaints);
 
-        // ESCAPE USER INPUT
+/* UPDATE COMPLAINT STATUS */
 
-        function escapeHTML(value) {
+function updateStatus(id, newStatus) {
 
-            return String(value)
+    let complaint = complaints.find(function(item) {
+        return item.id === id;
+    });
 
-                .split("&").join("&amp;")
+    if (complaint) {
 
-                .split("<").join("&lt;")
+        complaint.status = newStatus;
 
-                .split(">").join("&gt;")
+        displayAdminComplaints();
 
-                .split('"').join("&quot;")
+        updateStatistics();
 
-                .split("'").join("&#039;");
+    }
 
-        }
+}
 
+/* ADMIN STATISTICS */
 
+function updateStatistics() {
 
-        // LOGOUT
+    document.getElementById("totalCount").textContent =
+        complaints.length;
 
-        function logout() {
+    document.getElementById("pendingCount").textContent =
+        complaints.filter(function(c) {
+            return c.status === "Pending";
+        }).length;
 
-            currentUser = null;
+    document.getElementById("progressCount").textContent =
+        complaints.filter(function(c) {
+            return c.status === "In Progress";
+        }).length;
 
+    document.getElementById("resolvedCount").textContent =
+        complaints.filter(function(c) {
+            return c.status === "Resolved";
+        }).length;
 
-            document.getElementById("loginForm").reset();
+}
 
-            document.getElementById("complaintForm").reset();
+/* ESCAPE USER INPUT */
 
+function escapeHTML(value) {
 
-            hideAllSections();
+    return String(value)
+        .split("&").join("&amp;")
+        .split("<").join("&lt;")
+        .split(">").join("&gt;")
+        .split('"').join("&quot;")
+        .split("'").join("&#039;");
 
-            showLogin();
+}
 
-        }
+/* LOGOUT */
 
-    </script>
+function logout() {
+
+    currentUser = null;
+
+    document.getElementById("loginForm").reset();
+
+    document.getElementById("complaintForm").reset();
+
+    showAuth();
+
+    showLogin();
+
+}
+
+</script>
 
 </body>
-
 </html>
